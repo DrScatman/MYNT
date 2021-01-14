@@ -29,7 +29,7 @@ const config: HardhatUserConfig = {
   solidity: {
     compilers: [
       {
-        version: "0.7.3",
+        version: "0.7.6",
         settings: {
           optimizer: {
             enabled: true,
@@ -38,6 +38,14 @@ const config: HardhatUserConfig = {
         },
       },
     ],
+  },
+  networks: {
+    hardhat: {
+      forking: {
+        url:
+          "https://eth-ropsten.alchemyapi.io/v2/yPAz2b88rNkRijRZEX62lk7KVn_3D6L_",
+      },
+    },
   },
 };
 export default config;

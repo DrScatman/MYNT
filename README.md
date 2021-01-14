@@ -13,9 +13,9 @@ It runs up a Hardhat node, compile contracts, generates typescript interfaces, c
 4. Open up a new terminal
 5. `cd frontend`
 6. Install deps with yarn `yarn` or npm `npm install`
-7. Start React app with yarn `yarn start` or npm `npm start`
-
-The frontend should start up at http://localhost:3000/.
+7. Import seed phrase in Metamask. The default mnemonic currently used by hardhat is `test test test test test test test test test test test junk`
+8. Ensure Metamask RPC is set to http://localhost:8545.
+9. Start React app with yarn `yarn start` or npm `npm start`. The frontend should start up at http://localhost:3000/.
 
 Because of this default hardhat.config.ts it will first try to connect with an injected provider like Metamask (web3modal package does this).
 
@@ -29,9 +29,13 @@ const config: HardhatUserConfig = {
 };
 ```
 
-The default mnemonic currently used by hardhat is `test test test test test test test test test test test junk`
+
 
 # FAQ
+
+## Metamask
+
+You may also need to set the chainID to 1337 if you are useing Hardhat blockchain development node.
 
 ## Invalid nonce.
 
