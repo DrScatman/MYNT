@@ -72,7 +72,7 @@ contract WiseToken is LiquidityToken {
             // 'WISE: wrong transformer'
         );
         criticalMass[_referrer].totalAmount = THRESHOLD_LIMIT;
-        criticalMass[_referrer].activationDay = _nextWiseDay();
+        criticalMass[_referrer].activationDay = _nextMyntDay();
     }
 
     /**
@@ -119,6 +119,61 @@ contract WiseToken is LiquidityToken {
      * @param _lockDays amount of days it is locked for.
      * @param _referrer referrer address for +10% bonus
      */
+    // function createStakeWithToken(
+    //     address _tokenAddress,
+    //     uint256 _tokenAmount,
+    //     uint64 _lockDays,
+    //     address _referrer
+    // )
+    //     external
+    //     returns (bytes16, uint256, bytes16 referralID)
+    // {
+    //     ERC20TokenI token = ERC20TokenI(
+    //         _tokenAddress
+    //     );
+
+    //     token.transferFrom(
+    //         msg.sender,
+    //         address(this),
+    //         _tokenAmount
+    //     );
+
+    //     token.approve(
+    //         address(UNISWAP_ROUTER),
+    //         _tokenAmount
+    //     );
+
+    //     address[] memory path = _preparePath(
+    //         _tokenAddress,
+    //         address(this)
+    //     );
+
+    //     uint256[] memory amounts =
+    //     UNISWAP_ROUTER.swapExactTokensForTokens(
+    //         _tokenAmount,
+    //         1,
+    //         path,
+    //         msg.sender,
+    //         block.timestamp + 2 hours
+    //     );
+
+    //     return createStake(
+    //         amounts[2],
+    //         _lockDays,
+    //         _referrer
+    //     );
+    // }
+
+    /**
+     * @notice allows to create stake with another token
+     * if you don't have WISE tokens method will convert
+     * and use amount returned from UNISWAP to open a stake
+     * @dev the token must have WETH pair on UNISWAP
+     * @param _tokenAddress any ERC20 token address
+     * @param _tokenAmount amount to be converted to WISE
+     * @param _lockDays amount of days it is locked for.
+     * @param _referrer referrer address for +10% bonus
+     */
     function createStakeWithToken(
         address _tokenAddress,
         uint256 _tokenAmount,
@@ -128,7 +183,7 @@ contract WiseToken is LiquidityToken {
         external
         returns (bytes16, uint256, bytes16 referralID)
     {
-        ERC20TokenI token = ERC20TokenI(
+        TRC20TokenI token = TRC20TokenI(
             _tokenAddress
         );
 
@@ -139,26 +194,20 @@ contract WiseToken is LiquidityToken {
         );
 
         token.approve(
-            address(UNISWAP_ROUTER),
+            address(JUSTSWAP_EXCHANGE),
             _tokenAmount
         );
 
-        address[] memory path = _preparePath(
-            _tokenAddress,
+        uint256 amount = JUSTSWAP_EXCHANGE.tokenToTokenSwapInput(
+            _tokenAmount, 
+            1, 
+            1, 
+            block.timestamp + 2 hours, 
             address(this)
         );
 
-        uint256[] memory amounts =
-        UNISWAP_ROUTER.swapExactTokensForTokens(
-            _tokenAmount,
-            1,
-            path,
-            msg.sender,
-            block.timestamp + 2 hours
-        );
-
         return createStake(
-            amounts[2],
+            amount,
             _lockDays,
             _referrer
         );

@@ -32,7 +32,7 @@ abstract contract StakingToken is ReferralToken {
 
     /**
      * @notice A method for a staker to create a stake
-     * @param _stakedAmount amount of WISE staked.
+     * @param _stakedAmount amount of MYNT staked.
      * @param _lockDays amount of days it is locked for.
      * @param _referrer address of the referrer
      */
@@ -48,18 +48,18 @@ abstract contract StakingToken is ReferralToken {
         require(
             msg.sender != _referrer &&
             notContract(_referrer)
-            // 'WISE: invalid referrer'
+            // 'MYNT: invalid referrer'
         );
 
         require(
             _lockDays >= MIN_LOCK_DAYS &&
             _lockDays <= MAX_LOCK_DAYS
-            // 'WISE: stake is not in range'
+            // 'MYNT: stake is not in range'
         );
 
         require(
             _stakedAmount >= MIN_STAKE_AMOUNT
-            // 'WISE: stake is not large enough'
+            // 'MYNT: stake is not large enough'
         );
 
         (
@@ -147,7 +147,7 @@ abstract contract StakingToken is ReferralToken {
             _stakedAmount
         );
 
-        _startDay = _nextWiseDay();
+        _startDay = _nextMyntDay();
         _stakeID = generateStakeID(_staker);
 
         _newStake.lockDays = _lockDays;
@@ -167,7 +167,7 @@ abstract contract StakingToken is ReferralToken {
 
         _newStake.daiEquivalent = latestDaiEquivalent
             .mul(_newStake.stakedAmount)
-            .div(YODAS_PER_WISE);
+            .div(YODAS_PER_MYNT);
 
         if (_nonZeroAddress(_referrer)) {
 

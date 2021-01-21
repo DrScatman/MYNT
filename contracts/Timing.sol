@@ -14,7 +14,7 @@ abstract contract Timing is Declaration {
         return _wiseDayFromStamp(_getNow());
     }
 
-    function _nextWiseDay() internal view returns (uint64) {
+    function _nextMyntDay() internal view returns (uint64) {
         return _currentWiseDay() + 1;
     }
 

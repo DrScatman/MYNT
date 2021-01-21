@@ -13,6 +13,11 @@ interface IUniswapV2Factory {
         address pair
     );
 }
+interface IJustswapFactory {
+   function createExchange(
+       address token
+    ) external returns (address);
+}
 
 interface IUniswapRouterV2 {
 
@@ -54,6 +59,29 @@ interface IUniswapV2Pair {
     function token1() external view returns (address);
 }
 
+interface IJustswapExchange {
+
+    // function getTrxToTokenOutputPrice(
+    //     uint256 tokens_bought
+    // ) external view returns (uint256);
+
+
+    function trxToTokenSwapInput(
+        uint256 min_tokens, 
+        uint256 deadline
+    ) external payable returns (uint256);
+
+    function tokenToTokenSwapInput(
+        uint256 tokens_sold, 
+        uint256 min_tokens_bought, 
+        uint256 min_trx_bought, 
+        uint256 deadline, 
+        address token_addr
+        ) external returns (uint256);
+
+    function tokenAddress() external view returns (address);
+}
+
 interface ILiquidityGuard {
     function getInflation(uint32 _amount) external view returns (uint256);
 }
@@ -76,10 +104,28 @@ interface ERC20TokenI {
     );
 }
 
+interface TRC20TokenI {
+
+    function transferFrom(
+        address _from,
+        address _to,
+        uint256 _value
+    )  external returns (
+        bool success
+    );
+
+    function approve(
+        address _spender,
+        uint256 _value
+    )  external returns (
+        bool success
+    );
+}
+
 abstract contract Declaration is Global {
 
     uint256 constant _decimals = 18;
-    uint256 constant YODAS_PER_WISE = 10 ** _decimals;
+    uint256 constant YODAS_PER_MYNT = 10 ** _decimals;
 
     // uint32 constant SECONDS_IN_DAY = 86400 seconds;
     uint16 constant SECONDS_IN_DAY = 30 seconds;
@@ -112,6 +158,7 @@ abstract contract Declaration is Global {
     // address constant WETH = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2; // mainnet
     address constant WETH = 0xc778417E063141139Fce010982780140Aa0cD5Ab; // ropsten
     // address constant WETH = 0xEb59fE75AC86dF3997A990EDe100b90DDCf9a826; // local
+    address constant BTC = address(TTKyJ4zTViPEZfkCdxvMFzR8YYCztJriPN);
 
     IUniswapRouterV2 public constant UNISWAP_ROUTER = IUniswapRouterV2(
         // 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D // mainnet
@@ -125,6 +172,10 @@ abstract contract Declaration is Global {
         0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f // ropsten
         // 0xd627ba3B9D89b99aa140BbdefD005e8CdF395a25 // local
     );
+    
+    IJustswapFactory public constant JUSTSWAP_FACTORY = IJustswapFactory(
+        address(TXk8rQSAvPvBBNtqSoY6nCfsXWCSSpTVQF) // mainnet
+    );
 
     ILiquidityGuard public constant LIQUIDITY_GUARD = ILiquidityGuard(
         // 0x9C306CaD86550EC80D77668c0A8bEE6eB34684B6 // mainnet
@@ -133,6 +184,7 @@ abstract contract Declaration is Global {
     );
 
     IUniswapV2Pair public UNISWAP_PAIR;
+    IJustswapExchange public JUSTSWAP_EXCHANGE;
     bool public isLiquidityGuardActive;
 
     uint256 public latestDaiEquivalent;
@@ -149,6 +201,12 @@ abstract contract Declaration is Global {
             UNISWAP_FACTORY.createPair(
                 WETH, address(this)
             )
+        );
+    }
+    
+    function createExchange() external {
+        JUSTSWAP_EXCHANGE = IJustswapExchange(
+            JUSTSWAP_FACTORY.createExchange(BTC)
         );
     }
 

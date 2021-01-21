@@ -37,7 +37,7 @@ abstract contract LiquidityToken is StakingToken {
             msg.sender
         );
 
-        newLiquidityStake.startDay = _nextWiseDay();
+        newLiquidityStake.startDay = _nextMyntDay();
         newLiquidityStake.stakedAmount = _liquidityTokens;
         newLiquidityStake.isActive = true;
 

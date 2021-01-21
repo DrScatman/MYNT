@@ -105,7 +105,7 @@ abstract contract ReferralToken is Snapshot {
         returns (uint256)
     {
         try UNISWAP_ROUTER.getAmountsOut(
-            YODAS_PER_WISE, _path
+            YODAS_PER_MYNT, _path
         ) returns (uint256[] memory results) {
             latestDaiEquivalent = results[2];
             return latestDaiEquivalent;
@@ -115,6 +115,22 @@ abstract contract ReferralToken is Snapshot {
             return latestDaiEquivalent;
         }
     }
+    
+    // function _updateTetherEquivalent()
+    //     internal
+    //     returns (uint256)
+    // {
+    //     try JUSTSWAP_EXCHANGE.getAmountsOut(
+    //         YODAS_PER_MYNT, _path
+    //     ) returns (uint256[] memory results) {
+    //         latestDaiEquivalent = results[2];
+    //         return latestDaiEquivalent;
+    //     } catch Error(string memory) {
+    //         return latestDaiEquivalent;
+    //     } catch (bytes memory) {
+    //         return latestDaiEquivalent;
+    //     }
+    // }
 
     function referrerInterest(
         bytes16 _referralID,
