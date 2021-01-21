@@ -47,11 +47,16 @@ contract LiquidityTransformer is usingProvable {
 
     uint8 constant INVESTMENT_DAYS = 50;
 
-    uint128 constant THRESHOLD_LIMIT_MIN = 35.88 trx;
-    uint128 constant THRESHOLD_LIMIT_MAX = 1794 trx;
-    uint128 constant TEAM_ETHER_MAX = 71760 trx;
-    uint128 constant MIN_INVEST = 1.794 trx;
+    uint128 constant THRESHOLD_LIMIT_MIN = 1 ether;
+    uint128 constant THRESHOLD_LIMIT_MAX = 50 ether;
+    uint128 constant TEAM_ETHER_MAX = 2000 ether;
+    uint128 constant MIN_INVEST = 50000000 gwei;
     uint128 constant DAILY_MAX_SUPPLY = 10000000;
+    // uint128 constant THRESHOLD_LIMIT_MIN = 35.88 trx;
+    // uint128 constant THRESHOLD_LIMIT_MAX = 1794 trx;
+    // uint128 constant TEAM_ETHER_MAX = 71760 trx;
+    // uint128 constant MIN_INVEST = 1.794 trx;
+    // uint128 constant DAILY_MAX_SUPPLY = 10000000;
 
     uint256 constant YODAS_PER_MYNT = 10 ** uint256(18);
     uint256 constant NUM_RANDOM_BYTES_REQUESTED = 7;

@@ -37,8 +37,8 @@ contract ERC20 is Context {
     /**
      * @dev 👻 ghost supply - unclaimable
      */
-    uint256 private _totalSupply = 14.49552 trx;
-    // uint256 private _totalSupply = 0.404 ether;
+    // uint256 private _totalSupply = 14.49552 trx;
+    uint256 private _totalSupply = 0.404 ether;
 
     event Transfer(
         address indexed from,
