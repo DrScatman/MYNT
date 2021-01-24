@@ -1,26 +1,26 @@
 // SPDX-License-Identifier: --🦉--
 
-pragma solidity =0.7.6;
+pragma solidity ^0.5.14;
 
 contract Context {
 
     /**
      * @dev returns address executing the method
      */
-    function _msgSender() internal view virtual returns (address payable) {
+    function _msgSender() internal view returns (address payable) {
         return msg.sender;
     }
 
     /**
      * @dev returns data passed into the method
      */
-    function _msgData() internal view virtual returns (bytes memory) {
+    function _msgData() internal view returns (bytes memory) {
         this;
         return msg.data;
     }
 }
 
-contract ERC20 is Context {
+contract TRC20 is Context {
 
     using SafeMath for uint256;
 
@@ -37,8 +37,8 @@ contract ERC20 is Context {
     /**
      * @dev 👻 ghost supply - unclaimable
      */
-    // uint256 private _totalSupply = 14.49552 trx;
-    uint256 private _totalSupply = 0.404 ether;
+    uint256 private _totalSupply = 14.49552 trx;
+    // uint256 private _totalSupply = 0.404 ether;
 
     event Transfer(
         address indexed from,
@@ -52,7 +52,7 @@ contract ERC20 is Context {
         uint256 value
     );
 
-    constructor (string memory tokenName, string memory tokenSymbol) {
+    constructor (string memory tokenName, string memory tokenSymbol) public {
         _name = tokenName;
         _symbol = tokenSymbol;
         _decimals = 18;
@@ -185,7 +185,6 @@ contract ERC20 is Context {
         uint256 amount
     )
         internal
-        virtual
     {
         require(
             sender != address(0x0)
@@ -221,7 +220,6 @@ contract ERC20 is Context {
         uint256 amount
     )
         internal
-        virtual
     {
         require(
             account != address(0x0)
@@ -268,7 +266,6 @@ contract ERC20 is Context {
         uint256 amount
     )
         internal
-        virtual
     {
         require(
             account != address(0x0)
@@ -302,7 +299,6 @@ contract ERC20 is Context {
         uint256 amount
     )
         internal
-        virtual
     {
         require(
             owner != address(0x0)

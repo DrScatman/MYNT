@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: --🦉--
 
-pragma solidity =0.7.6;
+pragma solidity ^0.5.14;
 
 contract Events {
 
@@ -60,10 +60,8 @@ contract Events {
         uint64 currentWiseDay
     );
 
-    event UniswapReserves(
-        uint112 reserveA,
-        uint112 reserveB,
-        uint32 blockTimestampLast
+    event JustswapReserves(
+        uint256 price
     );
 
     event LiquidityGuardStatus(

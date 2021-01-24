@@ -1,10 +1,8 @@
-// SPDX-License-Identifier: --🦉--
-
-pragma solidity =0.7.6;
+pragma solidity ^0.5.14;
 
 import "./Timing.sol";
 
-abstract contract Helper is Timing {
+contract Helper is Timing {
 
     using SafeMath for uint256;
 
@@ -155,7 +153,7 @@ abstract contract Helper is Timing {
     }
 
     function _calculationDay(Stake memory _stake) internal view returns (uint256) {
-        return _stake.finalDay > globals.currentWiseDay ? globals.currentWiseDay : _stake.finalDay;
+        return _stake.finalDay > globals.currentMyntDay ? globals.currentMyntDay : _stake.finalDay;
     }
 
     function _startingDay(Stake memory _stake) internal pure returns (uint256) {
@@ -179,21 +177,7 @@ abstract contract Helper is Timing {
             _stake.lockDays > 1 ?
             _stake.lockDays - 1 : 1;
     }
-
-    function _preparePath(
-        address _tokenAddress,
-        address _wiseAddress
-    )
-        internal
-        pure
-        returns (address[] memory _path)
-    {
-        _path = new address[](3);
-        _path[0] = _tokenAddress;
-        _path[1] = WETH;
-        _path[2] = _wiseAddress;
-    }
-
+    
     function safeTransfer(
         address token,
         address to,
@@ -211,7 +195,7 @@ abstract contract Helper is Timing {
 
         require(
             success && (data.length == 0 || abi.decode(data, (bool)))
-            // 'WISE: transfer failed'
+            // 'MYNT: transfer failed'
         );
     }
 
@@ -234,7 +218,7 @@ abstract contract Helper is Timing {
 
         require(
             success && (data.length == 0 || abi.decode(data, (bool)))
-            // 'WISE: transferFrom failed'
+            // 'MYNT: transferFrom failed'
         );
     }
 }

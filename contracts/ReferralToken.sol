@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: --🦉--
 
-pragma solidity =0.7.6;
+pragma solidity ^0.5.14;
 
 import "./Snapshot.sol";
 
-abstract contract ReferralToken is Snapshot {
+contract ReferralToken is Snapshot {
 
     using SafeMath for uint256;
 
@@ -100,27 +100,11 @@ abstract contract ReferralToken is Snapshot {
             criticalMass[_referrer].activationDay : _currentWiseDay();
     }
 
-    function _updateDaiEquivalent()
-        internal
-        returns (uint256)
-    {
-        try UNISWAP_ROUTER.getAmountsOut(
-            YODAS_PER_MYNT, _path
-        ) returns (uint256[] memory results) {
-            latestDaiEquivalent = results[2];
-            return latestDaiEquivalent;
-        } catch Error(string memory) {
-            return latestDaiEquivalent;
-        } catch (bytes memory) {
-            return latestDaiEquivalent;
-        }
-    }
-    
-    // function _updateTetherEquivalent()
+    // function _updateDaiEquivalent()
     //     internal
     //     returns (uint256)
     // {
-    //     try JUSTSWAP_EXCHANGE.getAmountsOut(
+    //     try UNISWAP_ROUTER.getAmountsOut(
     //         YODAS_PER_MYNT, _path
     //     ) returns (uint256[] memory results) {
     //         latestDaiEquivalent = results[2];
@@ -131,6 +115,15 @@ abstract contract ReferralToken is Snapshot {
     //         return latestDaiEquivalent;
     //     }
     // }
+    
+    function _updateTetherEquivalent()
+        internal
+        returns (uint256)
+    {
+        latestTetherEquivalent = JUSTSWAP_EXCHANGE.getTrxToTokenOutputPrice(YODAS_PER_MYNT);
+        return latestTetherEquivalent;
+        
+    }
 
     function referrerInterest(
         bytes16 _referralID,
@@ -147,8 +140,8 @@ abstract contract ReferralToken is Snapshot {
     }
 
     function referrerInterestBulk(
-        bytes16[] memory _referralIDs,
-        uint256[] memory _scrapeDays
+        bytes16[] calldata _referralIDs,
+        uint256[] calldata _scrapeDays
     )
         external
         snapshotTrigger

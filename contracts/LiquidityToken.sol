@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: --🦉--
 
-pragma solidity =0.7.6;
+pragma solidity ^0.5.14;
 
 import "./StakingToken.sol";
 
-abstract contract LiquidityToken is StakingToken {
+contract LiquidityToken is StakingToken {
 
     using SafeMath for uint;
 
@@ -25,7 +25,7 @@ abstract contract LiquidityToken is StakingToken {
         );
 
         safeTransferFrom(
-            address(UNISWAP_PAIR),
+            address(JUSTSWAP_EXCHANGE),
             msg.sender,
             address(this),
             _liquidityTokens
@@ -83,7 +83,7 @@ abstract contract LiquidityToken is StakingToken {
         );
 
         safeTransfer(
-            address(UNISWAP_PAIR),
+            address(JUSTSWAP_EXCHANGE),
             msg.sender,
             liquidityStake.stakedAmount
         );
@@ -137,8 +137,8 @@ abstract contract LiquidityToken is StakingToken {
         uint256 maxCalculationDay = _liquidityStake.startDay + MIN_REFERRAL_DAYS;
 
         uint256 calculationDay =
-            globals.currentWiseDay < maxCalculationDay ?
-            globals.currentWiseDay : maxCalculationDay;
+            globals.currentMyntDay < maxCalculationDay ?
+            globals.currentMyntDay : maxCalculationDay;
 
         for (uint256 _day = _liquidityStake.startDay; _day < calculationDay; _day++) {
             _rewardAmount += _liquidityStake.stakedAmount * PRECISION_RATE / lsnapshots[_day].inflationAmount;

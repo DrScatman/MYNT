@@ -1,11 +1,9 @@
-// SPDX-License-Identifier: --🦉--
+pragma solidity ^0.5.14;
 
-pragma solidity =0.7.6;
-
-import "./ERC20.sol";
+import "./TRC20.sol";
 import "./Events.sol";
 
-abstract contract Global is ERC20, Events {
+contract Global is TRC20, Events {
 
     using SafeMath for uint256;
 
@@ -13,14 +11,14 @@ abstract contract Global is ERC20, Events {
         uint256 totalStaked;
         uint256 totalShares;
         uint256 sharePrice;
-        uint256 currentWiseDay;
+        uint256 currentMyntDay;
         uint256 referralShares;
         uint256 liquidityShares;
     }
 
     Globals public globals;
 
-    constructor() {
+    constructor() public {
         globals.sharePrice = 100E15;
     }
 
@@ -80,7 +78,7 @@ abstract contract Global is ERC20, Events {
             globals.totalStaked,
             globals.sharePrice,
             globals.referralShares,
-            globals.currentWiseDay
+            globals.currentMyntDay
         );
     }
 }

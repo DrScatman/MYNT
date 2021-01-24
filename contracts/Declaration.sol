@@ -1,70 +1,26 @@
 // SPDX-License-Identifier: --🦉--
 
-pragma solidity =0.7.6;
+pragma solidity ^0.5.14;
 
 import "./Global.sol";
 
-interface IUniswapV2Factory {
-
-    function createPair(
-        address tokenA,
-        address tokenB
-    ) external returns (
-        address pair
-    );
-}
 interface IJustswapFactory {
    function createExchange(
        address token
     ) external returns (address);
 }
 
-interface IUniswapRouterV2 {
-
-    function getAmountsOut(
-        uint amountIn,
-        address[] calldata path
-    ) external view returns (
-        uint[] memory amounts
-    );
-
-    function swapExactTokensForTokens(
-        uint amountIn,
-        uint amountOutMin,
-        address[] calldata path,
-        address to,
-        uint deadline
-    ) external returns (
-        uint[] memory amounts
-    );
-
-    function swapExactETHForTokens(
-        uint amountOutMin,
-        address[] calldata path,
-        address to,
-        uint deadline
-    ) external payable returns (
-        uint[] memory amounts
-    );
-}
-
-interface IUniswapV2Pair {
-
-    function getReserves() external view returns (
-        uint112 reserve0,
-        uint112 reserve1,
-        uint32 blockTimestampLast
-    );
-
-    function token1() external view returns (address);
-}
-
 interface IJustswapExchange {
 
-    // function getTrxToTokenOutputPrice(
-    //     uint256 tokens_bought
-    // ) external view returns (uint256);
+    function getTrxToTokenOutputPrice(
+        uint256 tokens_bought
+    ) external view returns (uint256);
 
+    function getOutputPrice(
+        uint256 output_amount, 
+        uint256 input_reserve, 
+        uint256 output_reserve
+    ) external view returns (uint256);
 
     function trxToTokenSwapInput(
         uint256 min_tokens, 
@@ -77,31 +33,13 @@ interface IJustswapExchange {
         uint256 min_trx_bought, 
         uint256 deadline, 
         address token_addr
-        ) external returns (uint256);
+    ) external returns (uint256);
 
     function tokenAddress() external view returns (address);
 }
 
 interface ILiquidityGuard {
     function getInflation(uint32 _amount) external view returns (uint256);
-}
-
-interface ERC20TokenI {
-
-    function transferFrom(
-        address _from,
-        address _to,
-        uint256 _value
-    )  external returns (
-        bool success
-    );
-
-    function approve(
-        address _spender,
-        uint256 _value
-    )  external returns (
-        bool success
-    );
 }
 
 interface TRC20TokenI {
@@ -122,7 +60,7 @@ interface TRC20TokenI {
     );
 }
 
-abstract contract Declaration is Global {
+contract Declaration is Global {
 
     uint256 constant _decimals = 18;
     uint256 constant YODAS_PER_MYNT = 10 ** _decimals;
@@ -150,63 +88,37 @@ abstract contract Declaration is Global {
     uint96 constant DAILY_BONUS_A = 13698630136986302; // 25%:1825 = 0.01369863013 per day;
     uint96 constant DAILY_BONUS_B = 370233246945575;   // 5%:13505 = 0.00037023324 per day;
 
-    uint256 immutable LAUNCH_TIME;
+    uint256 LAUNCH_TIME;
 
-    // address constant DAI = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
-    address constant DAI = 0xaD6D458402F60fD3Bd25163575031ACDce07538D; // ropsten
-
-    // address constant WETH = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2; // mainnet
-    address constant WETH = 0xc778417E063141139Fce010982780140Aa0cD5Ab; // ropsten
-    // address constant WETH = 0xEb59fE75AC86dF3997A990EDe100b90DDCf9a826; // local
-    address constant BTC = address(TTKyJ4zTViPEZfkCdxvMFzR8YYCztJriPN);
-
-    IUniswapRouterV2 public constant UNISWAP_ROUTER = IUniswapRouterV2(
-        // 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D // mainnet
-        0xf164fC0Ec4E93095b804a4795bBe1e041497b92a // ropsten
-        // 0x57079e0d0657890218C630DA5248A1103a1b4ad0 // local
-        // 0x5FbDB2315678afecb367f032d93F642f64180aa3
-    );
-
-    IUniswapV2Factory public constant UNISWAP_FACTORY = IUniswapV2Factory(
-        // 0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f // mainnet
-        0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f // ropsten
-        // 0xd627ba3B9D89b99aa140BbdefD005e8CdF395a25 // local
-    );
+    // address constant WBTC = address(0x41EFC230E125C24DE35F6290AFCAFA28D50B436536); // mainnet
+    address constant WBTC = address(0x41C81BF28D35CF5A918BF0C2028796AF7718C5476E); // shasta
     
     IJustswapFactory public constant JUSTSWAP_FACTORY = IJustswapFactory(
-        address(TXk8rQSAvPvBBNtqSoY6nCfsXWCSSpTVQF) // mainnet
+        // address(0x41EED9E56A5CDDAA15EF0C42984884A8AFCF1BDEBB) // mainnet
+        address(0x415D2840648A30B65695FC342D4E202C4947975FC5) // shasta
     );
 
     ILiquidityGuard public constant LIQUIDITY_GUARD = ILiquidityGuard(
         // 0x9C306CaD86550EC80D77668c0A8bEE6eB34684B6 // mainnet
-        0x0C914aAE959e3099815e373d94DFfBA5F9E0Fdf8 // ropsten
-        // 0xEeAd57F022Af8f6b2544BFE7A39C80CdCFe07E4E // local
+        // 0x0C914aAE959e3099815e373d94DFfBA5F9E0Fdf8 // ropsten
+        // 0xEeAd57F022Af8f6b2544BFE7A39C80CdCFe07E4E // 
+        0x41
     );
 
-    IUniswapV2Pair public UNISWAP_PAIR;
     IJustswapExchange public JUSTSWAP_EXCHANGE;
     bool public isLiquidityGuardActive;
 
-    uint256 public latestDaiEquivalent;
-    address[] internal _path = [address(this), WETH, DAI];
+    uint256 public latestTetherEquivalent;
 
-    constructor() {
+    constructor() public {
         // LAUNCH_TIME = 1605052800; // (11th November 2020 @00:00 GMT == day 0)
         // LAUNCH_TIME = 1604966400; // (10th November 2020 @00:00 GMT == day 0)
         LAUNCH_TIME = block.timestamp;
     }
-
-    function createPair() external {
-        UNISWAP_PAIR = IUniswapV2Pair(
-            UNISWAP_FACTORY.createPair(
-                WETH, address(this)
-            )
-        );
-    }
     
     function createExchange() external {
         JUSTSWAP_EXCHANGE = IJustswapExchange(
-            JUSTSWAP_FACTORY.createExchange(BTC)
+            JUSTSWAP_FACTORY.createExchange(WBTC)
         );
     }
 
@@ -219,7 +131,7 @@ abstract contract Declaration is Global {
         uint64 finalDay;
         uint64 closeDay;
         uint256 scrapeDay;
-        uint256 daiEquivalent;
+        uint256 tetherEquivalent;
         uint256 referrerShares;
         address referrer;
         bool isActive;

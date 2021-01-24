@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: --🦉--
 
-pragma solidity =0.7.6;
+pragma solidity ^0.5.14;
 
 import "./ReferralToken.sol";
 
-abstract contract StakingToken is ReferralToken {
+contract StakingToken is ReferralToken {
 
     using SafeMath for uint256;
 
@@ -15,9 +15,9 @@ abstract contract StakingToken is ReferralToken {
      * @param _referrer address of the referrer
      */
     function createStakeBulk(
-        uint256[] memory _stakedAmount,
-        uint64[] memory _lockDays,
-        address[] memory _referrer
+        uint256[] calldata _stakedAmount,
+        uint64[] calldata _lockDays,
+        address[] calldata _referrer
     )
         external
     {
@@ -117,7 +117,7 @@ abstract contract StakingToken is ReferralToken {
             newStake.referrerShares,
             newStake.startDay,
             newStake.lockDays,
-            newStake.daiEquivalent
+            newStake.tetherEquivalent
         );
 
         return (stakeID, _startDay, referralID);
@@ -163,9 +163,9 @@ abstract contract StakingToken is ReferralToken {
             globals.sharePrice
         );
 
-        _updateDaiEquivalent();
+        _updateTetherEquivalent();
 
-        _newStake.daiEquivalent = latestDaiEquivalent
+        _newStake.tetherEquivalent = latestTetherEquivalent
             .mul(_newStake.stakedAmount)
             .div(YODAS_PER_MYNT);
 
@@ -175,7 +175,7 @@ abstract contract StakingToken is ReferralToken {
 
             _addCriticalMass(
                 _newStake.referrer,
-                _newStake.daiEquivalent
+                _newStake.tetherEquivalent
             );
 
             _newStake.referrerShares = _referrerShares(
@@ -226,7 +226,7 @@ abstract contract StakingToken is ReferralToken {
 
         _removeCriticalMass(
             endedStake.referrer,
-            endedStake.daiEquivalent,
+            endedStake.tetherEquivalent,
             endedStake.startDay
         );
 

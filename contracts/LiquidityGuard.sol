@@ -1,29 +1,4 @@
-// SPDX-License-Identifier: --🦉--
-
-pragma solidity =0.7.6;
-
-/*
-
-     _/|       |\_
-    /  |       |  \
-   |    \     /    |
-   |  \ /     \ /  |
-   | \  |     |  / |
-   | \ _\_/^\_/_ / |
-   |   --\\ //--    |
-    \_  \     /  _/
-      \__  |  __/
-         \ _ /
-        _/   \_   LiquidityGuard.sol
-       /  / \  \  Wise Foundation Library
-        /     \   By Vitalik Alderson
-
-
-The Wise Foundation is an unincorporated nonprofit association formed in February 2020.
-The WISE contract and various related software and websites are being wholly funded and
-developed by The Wise Foundation. Visit https://wisetoken.net/ for more information.
-
-*/
+pragma solidity ^0.5.14;
 
 contract LiquidityGuard {
 
@@ -46,7 +21,7 @@ contract LiquidityGuard {
 
     // 0.006% liquidityRate step increase;
 
-    constructor() {
+    constructor() public {
         InflationLN[100000] =  60835153328;
         InflationLN[100006] =  60835153328;
         InflationLN[100012] =  30418486635;

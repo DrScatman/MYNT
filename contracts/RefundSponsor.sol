@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: --🦉--
 
-pragma solidity =0.7.6;
+pragma solidity ^0.5.14;
 
 contract RefundSponsor {
 
@@ -31,7 +31,7 @@ contract RefundSponsor {
         _;
     }
 
-    receive()
+    function()
         external
         payable
     {
@@ -42,7 +42,7 @@ contract RefundSponsor {
         );
     }
 
-    constructor() {
+    constructor() public {
         refundSponsor = msg.sender;
         payoutPercent = 70;
     }

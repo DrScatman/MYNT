@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: --🦉--
 
-pragma solidity =0.7.6;
+pragma solidity ^0.5.14;
 
 import "./Declaration.sol";
 
-abstract contract Timing is Declaration {
+contract Timing is Declaration {
 
     function currentWiseDay() public view returns (uint64) {
         return _getNow() >= LAUNCH_TIME ? _currentWiseDay() : 0;

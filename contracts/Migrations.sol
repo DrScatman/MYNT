@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: --🦉--
 
-pragma solidity ^0.7.6;
+pragma solidity ^0.5.14;
 
 contract Migrations {
     address public owner;
     uint public last_completed_migration;
 
-    constructor() {
+    constructor() public {
         owner = msg.sender;
     }
 

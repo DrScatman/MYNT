@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: --🦉--
 
-pragma solidity =0.7.6;
+pragma solidity ^0.5.14;
 
 import "./Helper.sol";
 
-abstract contract Snapshot is Helper {
+contract Snapshot is Helper {
 
     using SafeMath for uint;
 
@@ -40,47 +40,35 @@ abstract contract Snapshot is Helper {
     /**
      * @notice allows to activate/deactivate
      * liquidity guard manually based on the
-     * liquidity in UNISWAP pair contract
+     * liquidity in JUSTSWAP Exchange contract
      */
-    function liquidityGuardTrigger() public {
+    // function liquidityGuardTrigger() public {
 
-        (
-            uint112 reserveA,
-            uint112 reserveB,
-            uint32 blockTimestampLast
-        ) = UNISWAP_PAIR.getReserves();
+    //     uint256 price = JUSTSWAP_EXCHANGE.getOutputPrice();
 
-        emit UniswapReserves(
-            reserveA,
-            reserveB,
-            blockTimestampLast
-        );
+    //     emit JustswapReserves(price);
 
-        uint256 onUniswap = UNISWAP_PAIR.token1() == WETH
-            ? reserveA
-            : reserveB;
+    //     uint256 ratio = totalSupply() == 0
+    //         ? 0
+    //         : price
+    //             .mul(200)
+    //             .div(totalSupply());
 
-        uint256 ratio = totalSupply() == 0
-            ? 0
-            : onUniswap
-                .mul(200)
-                .div(totalSupply());
+    //     if (ratio < 40 && isLiquidityGuardActive == false) enableLiquidityGuard();
+    //     if (ratio > 60 && isLiquidityGuardActive == true) disableLiquidityGuard();
 
-        if (ratio < 40 && isLiquidityGuardActive == false) enableLiquidityGuard();
-        if (ratio > 60 && isLiquidityGuardActive == true) disableLiquidityGuard();
+    //     emit LiquidityGuardStatus(
+    //         isLiquidityGuardActive
+    //     );
+    // }
 
-        emit LiquidityGuardStatus(
-            isLiquidityGuardActive
-        );
-    }
+    // function enableLiquidityGuard() private {
+    //     isLiquidityGuardActive = true;
+    // }
 
-    function enableLiquidityGuard() private {
-        isLiquidityGuardActive = true;
-    }
-
-    function disableLiquidityGuard() private {
-        isLiquidityGuardActive = false;
-    }
+    // function disableLiquidityGuard() private {
+    //     isLiquidityGuardActive = false;
+    // }
 
     /**
      * @notice allows volunteer to offload snapshots
@@ -109,7 +97,7 @@ abstract contract Snapshot is Helper {
         );
 
         require(
-            _updateDay > globals.currentWiseDay
+            _updateDay > globals.currentMyntDay
             // 'WISE: snapshot already taken for that day'
         );
 
@@ -126,12 +114,12 @@ abstract contract Snapshot is Helper {
     )
         private
     {
-        liquidityGuardTrigger();
+        //liquidityGuardTrigger();
 
         uint256 scheduledToEndToday;
         uint256 totalStakedToday = globals.totalStaked;
 
-        for (uint256 _day = globals.currentWiseDay; _day < _updateDay; _day++) {
+        for (uint256 _day = globals.currentMyntDay; _day < _updateDay; _day++) {
 
             // ------------------------------------
             // prepare snapshot for regular shares
@@ -211,7 +199,7 @@ abstract contract Snapshot is Helper {
             lsnapshots[_day] = lsnapshot;
 
             adjustLiquidityRates();
-            globals.currentWiseDay++;
+            globals.currentMyntDay++;
         }
     }
 
