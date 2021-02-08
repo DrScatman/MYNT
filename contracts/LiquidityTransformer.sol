@@ -1,20 +1,6 @@
 // SPDX-License-Identifier: --🦉--
 
-pragma solidity ^0.5.14;
-
-/*
- __      __.___  ____________________
-/  \    /  \   |/   _____/\_   _____/
-\   \/\/   /   |\_____  \  |    __)_
- \        /|   |/        \ |        \
-  \__/\  / |___/_______  //_______  /
-       \/              \/         \/
-
-The Wise Foundation is an unincorporated nonprofit association formed in February 2020.
-The WISE contract and various related software and websites are being wholly funded and
-developed by The Wise Foundation. Visit https://wisetoken.net/ for more information.
-
-*/
+pragma solidity =0.7.6;
 
 import './Interfaces.sol';
 

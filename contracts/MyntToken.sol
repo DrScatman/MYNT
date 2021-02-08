@@ -7,7 +7,7 @@ contract MyntToken is LiquidityToken {
     address public LIQUIDITY_TRANSFORMER;
     address public transformerGateKeeper;
 
-    constructor() public TRC20("Mynt Token", "MYNT") {
+    constructor() public TRC20("Mint Token", "MYNT") {
         transformerGateKeeper = msg.sender;
     }
 
